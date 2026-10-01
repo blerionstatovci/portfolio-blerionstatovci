@@ -1,0 +1,286 @@
+.floating-top-widgets {
+  display: none;
+}
+.os-shell {
+  background:
+    linear-gradient(
+      105deg,
+      rgba(2, 8, 15, 0.9),
+      rgba(5, 18, 31, 0.68) 48%,
+      rgba(3, 9, 19, 0.86)
+    ),
+    url("/dark-productivity.jfif") center / cover fixed;
+}
+.system-widget,
+.terminal-widget {
+  display: none !important;
+}
+.topbar {
+  inset: 10px 20px auto;
+  height: 47px;
+  padding: 0 10px;
+  border: 1px solid rgba(181, 218, 235, 0.17);
+  border-radius: 14px;
+  background: rgba(5, 18, 32, 0.72);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+  gap: 16px;
+}
+.brand {
+  height: 35px;
+  min-width: 190px;
+  padding: 0 12px;
+  border-radius: 9px;
+  background: rgba(118, 177, 204, 0.1);
+  border: 1px solid rgba(189, 222, 236, 0.1);
+}
+.brand-mark {
+  width: 27px;
+  height: 27px;
+  border-radius: 7px;
+  font-size: 10px;
+}
+.search-bar {
+  height: 31px;
+  max-width: 590px;
+  border-radius: 10px;
+  background: rgba(2, 12, 23, 0.58);
+  border-color: rgba(146, 207, 228, 0.16);
+}
+.top-status {
+  height: 35px;
+  padding: 0 12px;
+  border-left: 1px solid rgba(202, 223, 235, 0.13);
+  gap: 12px;
+}
+.sidebar {
+  top: 69px;
+  left: 10px;
+  bottom: 76px;
+  width: 156px;
+  padding: 48px 10px 20px;
+  border: 1px solid rgba(181, 218, 235, 0.13);
+  border-radius: 15px;
+  background: rgba(5, 18, 32, 0.62);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2);
+}
+.sidebar button {
+  min-height: 34px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  font-size: 9px;
+}
+.sidebar button svg {
+  width: 17px;
+  height: 17px;
+}
+.sidebar button.active {
+  background: rgba(51, 139, 221, 0.72);
+  box-shadow:
+    0 5px 16px rgba(39, 137, 221, 0.23),
+    inset 2px 0 #b7e4ff;
+}
+.desktop {
+  margin-left: 177px;
+  margin-top: 10px;
+}
+.projects-panel {
+  border-radius: 12px;
+}
+.projects-panel .window-head {
+  height: 39px;
+  padding-inline: 15px;
+}
+.projects-panel .project-grid {
+  padding: 16px;
+  gap: 10px;
+}
+.sidebar:before {
+  content: "Blerion Statovci";
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  color: #e8f0f3;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.sidebar:after {
+  content: "Full-Stack Developer";
+  position: absolute;
+  top: 24px;
+  left: 14px;
+  color: #7f98a7;
+  font: 7px var(--mono);
+  white-space: nowrap;
+}
+.bottom-dock {
+  left: auto;
+  right: 238px;
+  bottom: 16px;
+  transform: none;
+  gap: 8px;
+  padding: 9px 12px;
+  border-color: rgba(125, 194, 219, 0.24);
+  background: rgba(7, 24, 39, 0.86);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.34);
+}
+.bottom-dock button {
+  width: 42px;
+  height: 42px;
+  border-radius: 9px;
+  border: 1px solid rgba(145, 203, 220, 0.16);
+  background: rgba(112, 177, 205, 0.14);
+  color: #b6d6df;
+}
+.bottom-dock button:hover {
+  background: rgba(132, 209, 224, 0.28);
+  box-shadow: 0 0 15px rgba(96, 190, 218, 0.2);
+}
+.music-player {
+  right: 20px;
+  bottom: 16px;
+  width: 205px;
+  min-height: 54px;
+  padding: 9px;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+.action-toast{position:fixed;right:22px;bottom:78px;z-index:30;padding:10px 14px;border:1px solid rgba(143,211,224,.28);border-radius:8px;background:rgba(7,24,39,.92);box-shadow:0 12px 30px rgba(0,0,0,.32);color:#d7edf0;font-size:9px}
+@media (min-width: 721px) {
+  .bottom-dock {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    transform: none;
+    justify-content: center;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+  .music-player {
+    bottom: 7px;
+    right: 20px;
+  }
+}
+@media (min-width: 1200px) {
+  .hero-section {
+    min-height: 285px;
+    padding-top: 28px;
+    padding-bottom: 12px;
+    padding-right: 540px;
+  }
+  .weather-widget {
+    position: fixed;
+    z-index: 7;
+    top: 74px;
+    right: 290px;
+    width: 250px;
+    height: 122px;
+  }
+  .right-column > .quote-widget {
+    position: fixed;
+    z-index: 6;
+    top: 74px;
+    right: 28px;
+    width: 245px;
+    min-height: 88px;
+  }
+  .right-column > .system-widget {
+    position: fixed;
+    z-index: 6;
+    top: 186px;
+    right: 28px;
+    width: 245px;
+  }
+  .right-column > .terminal-widget {
+    position: fixed;
+    z-index: 6;
+    top: 166px;
+    right: 290px;
+    width: 245px;
+  }
+  .right-column > .terminal-widget {
+    margin-top: 0;
+  }
+  .right-column > .skills-panel {
+    margin-top: 0;
+  }
+  .projects-panel {
+    transform: translateY(20px);
+  }
+  .quote-widget + .system-widget {
+    display: block;
+  }
+}
+@media (min-width: 721px) and (max-width: 1199px) {
+  .hero-section {
+    min-height: 320px;
+    padding-right: 6%;
+  }
+  .weather-widget {
+    position: absolute;
+    top: 28px;
+    right: 29px;
+  }
+  .right-column > .quote-widget,
+  .right-column > .system-widget,
+  .right-column > .terminal-widget {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: auto;
+  }
+}
+@media (max-width: 720px) {
+  .topbar {
+    inset: 7px 9px auto;
+    height: 39px;
+    padding: 0 7px;
+    border-radius: 11px;
+  }
+  .brand {
+    height: 30px;
+    min-width: auto;
+    padding: 0 7px;
+    background: transparent;
+    border: 0;
+  }
+  .brand-mark {
+    width: 24px;
+    height: 24px;
+  }
+  .sidebar {
+    top: 50px;
+    left: -125px;
+    bottom: 0;
+    width: 120px;
+    padding: 25px 8px;
+    border: 0;
+    border-radius: 0;
+    background: rgba(5, 16, 29, 0.9);
+  }
+  .desktop {
+    margin-left: 0;
+  }
+  .bottom-dock {
+    left: 50%;
+    right: auto;
+    bottom: 11px;
+    transform: translateX(-50%);
+    padding: 7px 9px;
+  }
+  .bottom-dock button {
+    width: 31px;
+    height: 31px;
+  }
+  .music-player {
+    right: 12px;
+    bottom: 62px;
+    width: 160px;
+    min-height: 0;
+    padding: 7px;
+  }
+}
