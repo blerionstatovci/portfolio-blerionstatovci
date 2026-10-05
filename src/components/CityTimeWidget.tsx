@@ -1,14 +1,10 @@
 import { useClock } from "../hooks/useClock";
 import { Globe2 } from "lucide-react";
+import { formatPrishtinaTime } from "../utils/time";
 
 export function CityTimeWidget() {
   const cityTime = useClock(1_000);
-  const cityClock = new Intl.DateTimeFormat([], {
-    timeZone: "Europe/Belgrade",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  }).format(cityTime);
+  const cityClock = formatPrishtinaTime(cityTime);
 
   return (
     <aside className="city-time-widget">

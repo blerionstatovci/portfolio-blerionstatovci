@@ -7,6 +7,7 @@ import { DesktopApp } from "./DesktopApp";
 import { IosStatusBar } from "./IosStatusBar";
 import { LockScreen } from "./LockScreen";
 import { BootScreen } from "./BootScreen";
+import { Analytics } from "./Analytics";
 import { ToastProvider, useToast } from "./Toast";
 import { useClock } from "../hooks/useClock";
 import { useLocalStorage } from "../hooks/useLocalStorage";
@@ -95,6 +96,7 @@ function RuntimeShell() {
         "--blerion-wallpaper-previous": previousWallpaper,
       } as React.CSSProperties}
     >
+      <Analytics />
       <IosStatusBar time={time} clock24={settings.clock24} activeAppName={activeAppName} />
       <DesktopApp
         accent={settings.accent}
@@ -129,7 +131,7 @@ function RuntimeShell() {
         setClock24={(clock24) => updateSetting("clock24", clock24, true)}
       />
       {contactOpen && <ContactForm close={() => setContactOpen(false)} />}
-      {booting && <BootScreen onSkip={completeBoot} />}
+      {booting && <BootScreen onSkip={completeBoot} reducedMotion={settings.reducedMotion} />}
     </div>
   );
 }

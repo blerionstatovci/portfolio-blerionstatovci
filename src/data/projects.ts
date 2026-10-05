@@ -1,5 +1,6 @@
 import type { Project } from "../types/app";
 
+// TODO(owner): fill verified role, problem, outcome, learnings, repoUrl and featured values per project.
 export const projects: readonly Project[] = [
   {
     name: "Eleganca",

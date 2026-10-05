@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 
-export function BootScreen({ onSkip }: { onSkip: () => void }) {
+export function BootScreen({ onSkip, reducedMotion = false }: { onSkip: () => void; reducedMotion?: boolean }) {
   return (
     <motion.div
-      className="boot-screen"
+      className={`boot-screen ${reducedMotion ? "reduce-motion" : ""}`}
       initial={{ opacity: 1 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

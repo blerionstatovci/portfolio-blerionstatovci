@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, type PanInfo } from "framer-motion";
 import { Grid2X2, Search, Settings2, X } from "lucide-react";
 import { AppIcon } from "./AppIcon";
@@ -6,14 +6,6 @@ import { ContextMenu, type ContextMenuAction } from "./ContextMenu";
 import { DockItem } from "./DockItem";
 import { Window } from "./Window";
 import { ProjectModal } from "./ProjectModal";
-import { AboutApp } from "../apps/AboutApp";
-import { CertificatesApp } from "../apps/CertificatesApp";
-import { ContactApp } from "../apps/ContactApp";
-import { ExperienceApp } from "../apps/ExperienceApp";
-import { ProjectsApp } from "../apps/ProjectsApp";
-import { SettingsApp } from "../apps/SettingsApp";
-import { SkillsApp } from "../apps/SkillsApp";
-import { TerminalApp } from "../apps/TerminalApp";
 import { apps } from "../data/apps";
 import { profile } from "../data/profile";
 import { projects } from "../data/projects";
@@ -21,8 +13,21 @@ import type { Language, Theme } from "../data/settings";
 import { t } from "../i18n";
 import { useWindowManager } from "../hooks/useWindowManager";
 import type { AppId, DockOrigin, Project, WindowState } from "../types/app";
+import { filterSearchableItems } from "../utils/search";
 
 const SNAP_EDGE = 28;
+const AboutApp = lazy(() => import("../apps/AboutApp").then(({ AboutApp }) => ({ default: AboutApp })));
+const CertificatesApp = lazy(() => import("../apps/CertificatesApp").then(({ CertificatesApp }) => ({ default: CertificatesApp })));
+const ContactApp = lazy(() => import("../apps/ContactApp").then(({ ContactApp }) => ({ default: ContactApp })));
+const ExperienceApp = lazy(() => import("../apps/ExperienceApp").then(({ ExperienceApp }) => ({ default: ExperienceApp })));
+const ProjectsApp = lazy(() => import("../apps/ProjectsApp").then(({ ProjectsApp }) => ({ default: ProjectsApp })));
+const SettingsApp = lazy(() => import("../apps/SettingsApp").then(({ SettingsApp }) => ({ default: SettingsApp })));
+const SkillsApp = lazy(() => import("../apps/SkillsApp").then(({ SkillsApp }) => ({ default: SkillsApp })));
+const TerminalApp = lazy(() => import("../apps/TerminalApp").then(({ TerminalApp }) => ({ default: TerminalApp })));
+
+function AppSkeleton() {
+  return <div className="app-skeleton" aria-label="Loading app"><i /><i /><i /></div>;
+}
 
 export function DesktopApp({
   accent,
@@ -113,11 +118,11 @@ export function DesktopApp({
     [dispatch, dockOriginFor],
   );
   const filtered = useMemo(
-    () => apps.filter((app) => `${app.label} ${app.hint}`.toLowerCase().includes(query.toLowerCase())),
+    () => filterSearchableItems(apps, query, (app) => `${app.label} ${app.hint}`),
     [query],
   );
   const filteredProjects = useMemo(
-    () => projects.filter((project) => `${project.name} ${project.category} ${project.tech.join(" ")}`.toLowerCase().includes(query.toLowerCase())),
+    () => filterSearchableItems(projects, query, (project) => `${project.name} ${project.category} ${project.tech.join(" ")}`),
     [query],
   );
   const activeWindow = windowManager.windows
@@ -303,7 +308,7 @@ export function DesktopApp({
                 dragStart={() => update(windowState.id, { snap: null })}
                 finished={(status) => dispatch({ type: "finish", id: windowState.id, status })}
               >
-                {content(windowState.id)}
+                <Suspense fallback={<AppSkeleton />}>{content(windowState.id)}</Suspense>
               </Window>
             );
           })}

@@ -121,6 +121,15 @@
 
 .terminal-output { max-height: 330px; overflow: auto; }
 .terminal-output pre { margin: 0; white-space: pre-wrap; font: inherit; }
+.app-skeleton { min-height: 220px; display: grid; place-content: center; gap: 8px; }
+.app-skeleton i { display: block; width: 180px; height: 8px; border-radius: 99px; background: linear-gradient(90deg, var(--raised), var(--border), var(--raised)); background-size: 220% 100%; animation: skeleton-shimmer 1.2s ease-in-out infinite; }
+.app-skeleton i:nth-child(2) { width: 135px; }
+.app-skeleton i:nth-child(3) { width: 160px; }
+@keyframes skeleton-shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+.project-thumb { position: relative; overflow: hidden; }
+.project-thumb::after { content: ""; position: absolute; inset: 30% 0 0; background: linear-gradient(180deg, transparent, rgba(2, 8, 16, .82)); pointer-events: none; }
+.project-thumb-image { display: block; width: 100%; height: 100%; min-height: 142px; object-fit: cover; }
+.project-thumb > span { position: relative; z-index: 1; }
 
 @media (max-width: 600px) {
   .certificates-list { grid-template-columns: 1fr; padding-inline: 16px; }

@@ -35,12 +35,18 @@ export function ProjectsApp({ inspect }: { inspect: (project: Project) => void }
       <div className="project-list">
         {visibleProjects.map((project) => (
           <article className="project-item" key={project.name} onDoubleClick={() => inspect(project)}>
-            <div
-              className="project-thumb"
-              style={{
-                backgroundImage: `linear-gradient(180deg, transparent 30%, rgba(2,8,16,.82)), url(${project.image})`,
-              }}
-            >
+            <div className="project-thumb">
+              <img
+                className="project-thumb-image"
+                src={project.image}
+                srcSet={`${project.image}&w=450 450w, ${project.image}&w=900 900w`}
+                sizes="(max-width: 600px) 92px, 105px"
+                alt=""
+                width="900"
+                height="600"
+                loading="lazy"
+                decoding="async"
+              />
               <span>LIVE</span>
             </div>
             <div className="project-meta">

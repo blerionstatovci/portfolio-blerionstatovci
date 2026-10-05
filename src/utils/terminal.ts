@@ -104,8 +104,8 @@ export function parseTerminalCommand(rawInput: string): TerminalResult {
     return { output: "Permission granted. Blerion is ready to build.\nRun 'open contact' to start a conversation.", action: { type: "open", id: "contact" } };
   }
 
-  const maybe = suggestion(command.split(" ")[0]);
-  return { output: maybe ? `command not found: ${raw}\nDid you mean '${maybe}'?` : `command not found: ${raw}` };
+  const maybe = suggestion(command.split(" ")[0]) ?? "help";
+  return { output: `command not found: ${raw}\nDid you mean '${maybe}'?` };
 }
 
 export function autocompleteTerminalInput(value: string) {

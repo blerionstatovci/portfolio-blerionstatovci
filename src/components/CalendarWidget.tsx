@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { buildCalendarGrid } from "../utils/calendar";
 
 const weekdays = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
@@ -9,12 +10,7 @@ export function CalendarWidget({ time }: { time: Date }) {
   const calendar = useMemo(() => {
     const year = cursor.getFullYear();
     const monthIndex = cursor.getMonth();
-    const leadingBlanks = (new Date(year, monthIndex, 1).getDay() + 6) % 7;
-    const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
-    return [
-      ...Array.from({ length: leadingBlanks }, () => null),
-      ...Array.from({ length: daysInMonth }, (_, index) => index + 1),
-    ];
+    return buildCalendarGrid(year, monthIndex);
   }, [cursor]);
 
   const isCurrentMonth = cursor.getFullYear() === time.getFullYear() && cursor.getMonth() === time.getMonth();

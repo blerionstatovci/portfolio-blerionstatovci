@@ -305,6 +305,7 @@
 .boot-screen small { color: var(--muted); font: 9px var(--mono); }
 .boot-progress { width: 170px; height: 3px; margin-top: 12px; overflow: hidden; border-radius: 99px; background: var(--border); }
 .boot-progress i { display: block; width: 38%; height: 100%; border-radius: inherit; background: var(--accent); animation: boot-progress 1.2s ease-in-out both; }
+.boot-screen.reduce-motion .boot-progress i { width: 100%; animation: none; }
 .boot-screen small { margin-top: 15px; opacity: .7; }
 
 @keyframes boot-progress {
