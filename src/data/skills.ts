@@ -1,0 +1,17 @@
+export const skills = [
+  "HTML",
+  "CSS",
+  "JavaScript",
+  "Java",
+  "UI/UX Design",
+  "Windows",
+  "React SSR",
+  "Node.js",
+  "Express.js — RESTful API",
+  "MongoDB",
+  "Next.js",
+  "Git/GitHub",
+  "Postman — API testing",
+  "Node Package Manager",
+  "HTTP/HTTPS",
+] as const;
