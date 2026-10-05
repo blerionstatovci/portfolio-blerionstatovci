@@ -12,6 +12,8 @@ export type AppId =
 
 export type DockOrigin = { x: number; y: number; scale: number };
 
+export type WindowSnap = "left" | "right" | null;
+
 export type WindowStatus =
   | "opening"
   | "open"
@@ -26,6 +28,9 @@ export type WindowState = {
   z: number;
   status: WindowStatus;
   origin: DockOrigin;
+  x?: number;
+  y?: number;
+  snap?: WindowSnap;
 };
 
 export type WindowManagerState = {
@@ -40,6 +45,14 @@ export type Project = {
   tech: readonly string[];
   url: string;
   image: string;
+  /** TODO(owner): add the repository URL when the project is public. */
+  repoUrl?: string;
+  /** TODO(owner): fill in case-study fields for projects that have them. */
+  role?: string;
+  problem?: string;
+  outcome?: string;
+  learnings?: string;
+  featured?: boolean;
 };
 
 export type TrainingItem = {

@@ -1,24 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ArrowRight, Check, Copy, Mail, X } from "lucide-react";
 import { profile } from "../data/profile";
-
-type ToastState = {
-  type: "success" | "error";
-  message: string;
-};
+import { useToast } from "./Toast";
 
 export function ContactForm({ inline = false, close }: { inline?: boolean; close?: () => void }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<"idle" | "sending">("idle");
-  const [toast, setToast] = useState<ToastState | null>(null);
-
-  useEffect(() => {
-    if (!toast) return;
-    const timer = window.setTimeout(() => setToast(null), 4_500);
-    return () => window.clearTimeout(timer);
-  }, [toast]);
-
-  const showToast = (nextToast: ToastState) => setToast(nextToast);
+  const { showToast } = useToast();
 
   const submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -30,7 +18,7 @@ export function ContactForm({ inline = false, close }: { inline?: boolean; close
 
     if (!name || !email || !message || !form.checkValidity()) {
       form.reportValidity();
-      showToast({ type: "error", message: "Please complete the required fields." });
+      showToast("Please complete the required fields.", "error");
       return;
     }
 
@@ -46,9 +34,9 @@ export function ContactForm({ inline = false, close }: { inline?: boolean; close
 
       if (!response.ok) throw new Error("Form submission failed");
       form.reset();
-      showToast({ type: "success", message: "Message sent successfully." });
+      showToast("Message sent successfully.", "success");
     } catch {
-      showToast({ type: "error", message: "Message could not be sent. Please try again or email directly." });
+      showToast("Message could not be sent. Please try again or email directly.", "error");
     } finally {
       setStatus("idle");
     }
@@ -58,9 +46,9 @@ export function ContactForm({ inline = false, close }: { inline?: boolean; close
     try {
       if (!navigator.clipboard) throw new Error("Clipboard unavailable");
       await navigator.clipboard.writeText(profile.email);
-      showToast({ type: "success", message: "Email address copied." });
+      showToast("Email address copied.", "success");
     } catch {
-      showToast({ type: "error", message: "Copy is unavailable in this browser." });
+      showToast("Copy is unavailable in this browser.", "error");
     }
   };
 
@@ -134,11 +122,6 @@ export function ContactForm({ inline = false, close }: { inline?: boolean; close
   return (
     <>
       {inline ? form : <div className="contact-form-overlay" onClick={close}>{form}</div>}
-      {toast && (
-        <div className={`contact-toast ${toast.type}`} role={toast.type === "error" ? "alert" : "status"} aria-live="polite">
-          {toast.message}
-        </div>
-      )}
     </>
   );
 }

@@ -1,1 +1,85 @@
-/* Dock styles remain in the preserved base cascade during Phase 0. */
+/* Phase 2 dock interactions. */
+.dock .dock-app,
+.dock .dock-launcher {
+  transform-origin: center bottom;
+  will-change: transform;
+}
+
+.dock .dock-app.active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateX(-50%);
+}
+
+.welcome-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.welcome-actions .primary-action,
+.welcome-actions .secondary-action {
+  cursor: pointer;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 9px 12px;
+  font: 9px var(--mono);
+}
+
+.welcome-actions .primary-action {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.welcome-actions .secondary-action {
+  color: var(--muted);
+  border-color: var(--border);
+}
+
+.launcher-project-results {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  width: 250px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, .34);
+}
+
+.launcher-project-results button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  color: var(--text);
+  text-align: left;
+  border-radius: 5px;
+}
+
+.launcher-project-results button:hover,
+.launcher-project-results button:focus-visible {
+  outline: 0;
+  background: var(--raised);
+}
+
+.launcher-project-results small {
+  color: var(--muted);
+  font: 8px var(--mono);
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .welcome-actions { flex-wrap: wrap; }
+  .welcome-actions .primary-action,
+  .welcome-actions .secondary-action { font-size: 8px; }
+  .launcher-project-results { right: auto; left: 0; width: min(250px, 80vw); }
+}

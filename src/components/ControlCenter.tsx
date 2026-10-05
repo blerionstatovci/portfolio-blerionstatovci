@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Grid2X2, LockKeyhole, Mail, Moon, Settings2, Sun, X } from "lucide-react";
 import type { Theme, WallpaperId } from "../data/settings";
 
@@ -26,6 +26,12 @@ export function ControlCenter({
   setClock24: (value: boolean) => void;
 }) {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const onOpen = () => setOpen(true);
+    document.addEventListener("blerion:open-control-center", onOpen);
+    return () => document.removeEventListener("blerion:open-control-center", onOpen);
+  }, []);
 
   return (
     <>

@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import { Bluetooth, Grid2X2, Wifi } from "lucide-react";
 
-export function IosStatusBar({ time, clock24 }: { time: Date; clock24: boolean }) {
+export function IosStatusBar({
+  time,
+  clock24,
+  activeAppName = "Workspace",
+}: {
+  time: Date;
+  clock24: boolean;
+  activeAppName?: string;
+}) {
   const [battery, setBattery] = useState<number | null>(null);
   const date = time.toLocaleDateString([], { weekday: "short", day: "2-digit", month: "short" });
   const clock = time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: !clock24 });
@@ -39,7 +47,7 @@ export function IosStatusBar({ time, clock24 }: { time: Date; clock24: boolean }
         </span>
       </button>
       <div className="ios-workspace">
-        <Grid2X2 size={14} /> Workspace <span>/</span> Main
+        <Grid2X2 size={14} /> <span className="ios-active-app">{activeAppName}</span> <span>/</span> Main
       </div>
       <div className="ios-status-right">
         <div className="ios-status-left" aria-label="Decorative connectivity indicators">

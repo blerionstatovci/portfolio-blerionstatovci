@@ -2,7 +2,7 @@ import { useReducer } from "react";
 import type { AppId, DockOrigin, WindowManagerState, WindowState } from "../types/app";
 
 export type WindowManagerAction =
-  | { type: "open"; id: AppId; origin: DockOrigin }
+  | { type: "open"; id: AppId; origin: DockOrigin; position?: { x: number; y: number } }
   | { type: "focus"; id: AppId }
   | { type: "update"; id: AppId; patch: Partial<WindowState> }
   | { type: "minimize"; id: AppId; origin: DockOrigin }
@@ -47,6 +47,9 @@ export function windowManagerReducer(
             status: "opening",
             origin: action.origin,
             z,
+            x: action.position?.x,
+            y: action.position?.y,
+            snap: null,
           },
         ],
       };

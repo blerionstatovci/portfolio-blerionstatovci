@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { AnimatePresence } from "framer-motion";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, type PanInfo } from "framer-motion";
 import { Grid2X2, Search, Settings2, X } from "lucide-react";
 import { AppIcon } from "./AppIcon";
+import { ContextMenu, type ContextMenuAction } from "./ContextMenu";
+import { DockItem } from "./DockItem";
 import { Window } from "./Window";
 import { ProjectModal } from "./ProjectModal";
 import { AboutApp } from "../apps/AboutApp";
@@ -13,9 +15,12 @@ import { SkillsApp } from "../apps/SkillsApp";
 import { TerminalApp } from "../apps/TerminalApp";
 import { apps } from "../data/apps";
 import { profile } from "../data/profile";
+import { projects } from "../data/projects";
 import type { Theme } from "../data/settings";
 import { useWindowManager } from "../hooks/useWindowManager";
 import type { AppId, DockOrigin, Project, WindowState } from "../types/app";
+
+const SNAP_EDGE = 28;
 
 export function DesktopApp({
   accent,
@@ -24,6 +29,7 @@ export function DesktopApp({
   setReducedMotion,
   theme,
   setTheme,
+  onActiveAppChange,
 }: {
   accent: string;
   setAccent: (value: string) => void;
@@ -31,10 +37,37 @@ export function DesktopApp({
   setReducedMotion: (value: boolean) => void;
   theme: Theme;
   setTheme: (value: Theme) => void;
+  onActiveAppChange?: (value: string) => void;
 }) {
   const { state: windowManager, dispatch } = useWindowManager();
+  const desktopRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Project | null>(null);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [snapTarget, setSnapTarget] = useState<"left" | "right" | "top" | null>(null);
+  const [canMagnify, setCanMagnify] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const update = () => setCanMagnify(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (!contextMenu) return;
+    const close = () => setContextMenu(null);
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") close();
+    };
+    document.addEventListener("pointerdown", close);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [contextMenu]);
 
   const originFor = useCallback((source?: HTMLElement): DockOrigin => {
     const rect = source?.getBoundingClientRect();
@@ -77,6 +110,18 @@ export function DesktopApp({
     () => apps.filter((app) => `${app.label} ${app.hint}`.toLowerCase().includes(query.toLowerCase())),
     [query],
   );
+  const filteredProjects = useMemo(
+    () => projects.filter((project) => `${project.name} ${project.category} ${project.tech.join(" ")}`.toLowerCase().includes(query.toLowerCase())),
+    [query],
+  );
+  const activeWindow = windowManager.windows
+    .filter((window) => !window.minimized)
+    .reduce<WindowState | undefined>((current, window) => (!current || window.z > current.z ? window : current), undefined);
+
+  useEffect(() => {
+    const app = apps.find((item) => item.id === activeWindow?.id);
+    onActiveAppChange?.(app?.label ?? "Workspace");
+  }, [activeWindow?.id, activeWindow?.z, onActiveAppChange]);
 
   const open = (id: AppId, source?: HTMLElement) => {
     if (id === "resume") {
@@ -86,7 +131,51 @@ export function DesktopApp({
 
     const dockSource =
       source ?? document.querySelector<HTMLElement>(`.dock-app[data-dock-app="${id}"]`) ?? undefined;
-    dispatch({ type: "open", id, origin: originFor(dockSource) });
+    const cascadeIndex = windowManager.windows.length % 5;
+    dispatch({
+      type: "open",
+      id,
+      origin: originFor(dockSource),
+      position: { x: 120 + cascadeIndex * 28, y: 94 + cascadeIndex * 24 },
+    });
+  };
+
+  const getSnapTarget = (info: PanInfo) => {
+    if (info.point.y <= SNAP_EDGE + 52) return "top" as const;
+    if (info.point.x <= SNAP_EDGE) return "left" as const;
+    if (info.point.x >= window.innerWidth - SNAP_EDGE) return "right" as const;
+    return null;
+  };
+
+  const handleSnapPreview = (info: PanInfo) => setSnapTarget(getSnapTarget(info));
+
+  const handleMove = (id: AppId, info: PanInfo) => {
+    const current = windowManager.windows.find((window) => window.id === id);
+    if (!current || !desktopRef.current) return;
+    const element = document.querySelector<HTMLElement>(`.native-app-window[data-window-id="${id}"]`);
+    const area = desktopRef.current.getBoundingClientRect();
+    const rect = element?.getBoundingClientRect();
+    const startX = current.x ?? (rect ? rect.left - area.left : 0);
+    const startY = current.y ?? (rect ? rect.top - area.top : 0);
+    const width = rect?.width ?? Math.min(720, area.width - 24);
+    const height = rect?.height ?? Math.min(560, area.height - 24);
+    const x = Math.max(0, Math.min(startX + info.offset.x, Math.max(0, area.width - width)));
+    const y = Math.max(0, Math.min(startY + info.offset.y, Math.max(0, area.height - height)));
+    update(id, { x, y });
+  };
+
+  const handleSnap = (id: AppId, info: PanInfo) => {
+    const next = getSnapTarget(info);
+    setSnapTarget(null);
+    if (next === "top") update(id, { maximized: true, snap: null });
+    if (next === "left" || next === "right") update(id, { maximized: false, snap: next });
+  };
+
+  const handleContextAction = (action: ContextMenuAction) => {
+    if (action === "refresh") window.location.reload();
+    if (action === "wallpaper") document.querySelector<HTMLButtonElement>(".control-center-trigger")?.click();
+    if (action === "terminal") open("terminal");
+    if (action === "about") open("about");
   };
 
   useEffect(() => {
@@ -151,21 +240,38 @@ export function DesktopApp({
 
   return (
     <div className={`os-shell accent-${accent} ${reducedMotion ? "reduce-motion" : ""}`}>
-      <main className="desktop-area">
+      <main
+        ref={desktopRef}
+        className="desktop-area"
+        onContextMenu={(event) => {
+          if ((event.target as HTMLElement).closest(".os-window")) return;
+          event.preventDefault();
+          setContextMenu({ x: event.clientX, y: event.clientY });
+        }}
+      >
         <div className="desktop-heading">
           <span className="eyebrow">
             <i />BLERION OS · PERSONAL WORKSPACE
           </span>
-          <h1>
-            Welcome.
-          </h1>
+          <h1>Welcome.</h1>
           <p>Hi, I’m Blerion. Build thoughtfully. Ship deliberately.</p>
+          <div className="welcome-actions">
+            <button className="primary-action" onClick={() => open("resume")}>
+              Open Resume
+            </button>
+            <a className="secondary-action" href={profile.resumePath} download>
+              Download CV
+            </a>
+          </div>
         </div>
         <div className="desktop-icons">
           {filtered.map((app) => (
             <AppIcon app={app} open={open} key={app.id} />
           ))}
         </div>
+        {snapTarget && (
+          <div className={`snap-preview snap-preview-${snapTarget}`} aria-hidden="true" />
+        )}
         <AnimatePresence>
           {windowManager.windows.map((windowState) => {
             const app = apps.find((item) => item.id === windowState.id)!;
@@ -175,10 +281,16 @@ export function DesktopApp({
                 state={windowState}
                 title={app.label}
                 icon={app.icon}
+                active={activeWindow?.id === windowState.id}
+                desktopConstraints={desktopRef}
                 focus={() => dispatch({ type: "focus", id: windowState.id })}
                 close={() => close(windowState.id)}
                 minimize={() => minimize(windowState.id)}
-                maximize={() => update(windowState.id, { maximized: !windowState.maximized })}
+                maximize={() => update(windowState.id, { maximized: !windowState.maximized, snap: null })}
+                move={(info) => handleMove(windowState.id, info)}
+                snap={(info) => handleSnap(windowState.id, info)}
+                snapPreview={handleSnapPreview}
+                dragStart={() => update(windowState.id, { snap: null })}
                 finished={(status) => dispatch({ type: "finish", id: windowState.id, status })}
               >
                 {content(windowState.id)}
@@ -188,48 +300,75 @@ export function DesktopApp({
         </AnimatePresence>
       </main>
       <nav className="dock" aria-label="Application dock">
-        <button className="dock-launcher" onClick={() => open("about")} aria-label="Open launcher">
-          <Grid2X2 size={19} />
-        </button>
+        <DockItem
+          icon={Grid2X2}
+          label="Open launcher"
+          launcher
+          magnify={canMagnify && !reducedMotion}
+          onClick={() => open("about")}
+        />
         {apps
           .filter((app) => app.id !== "settings")
           .map((app) => {
-            const Icon = app.icon;
             const isActive = windowManager.windows.some((window) => window.id === app.id && !window.minimized);
             return (
-              <button
-                className={isActive ? "dock-app active" : "dock-app"}
-                data-dock-app={app.id}
+              <DockItem
                 key={app.id}
+                icon={app.icon}
+                label={app.label}
+                dataDockApp={app.id}
+                active={isActive}
+                magnify={canMagnify && !reducedMotion}
                 onClick={(event) => toggleDockApp(app.id, event.currentTarget)}
-                title={app.label}
-              >
-                <Icon size={18} />
-              </button>
+              />
             );
           })}
         <span className="dock-divider" />
-        <button
-          className={windowManager.windows.some((window) => window.id === "settings" && !window.minimized) ? "dock-app active" : "dock-app"}
-          data-dock-app="settings"
+        <DockItem
+          icon={Settings2}
+          label="Settings"
+          dataDockApp="settings"
+          active={windowManager.windows.some((window) => window.id === "settings" && !window.minimized)}
+          magnify={canMagnify && !reducedMotion}
           onClick={(event) => toggleDockApp("settings", event.currentTarget)}
-          title="Settings"
-        >
-          <Settings2 size={18} />
-        </button>
+        />
       </nav>
       <div className="search-launcher">
         <Search size={14} />
-        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search apps..." aria-label="Search apps" />
+        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search apps and projects…" aria-label="Search apps and projects" />
         {query && (
           <button onClick={() => setQuery("")} aria-label="Clear search">
             <X size={13} />
           </button>
         )}
+        {query && filteredProjects.length > 0 && (
+          <div className="launcher-project-results" role="listbox" aria-label="Project results">
+            {filteredProjects.slice(0, 4).map((project) => (
+              <button
+                key={project.name}
+                onClick={() => {
+                  open("projects");
+                  setSelected(project);
+                  setQuery("");
+                }}
+              >
+                <span>{project.name}</span><small>{project.category}</small>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
       {selected && <ProjectModal project={selected} close={() => setSelected(null)} />}
+      {contextMenu && (
+        <ContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          close={() => setContextMenu(null)}
+          action={handleContextAction}
+        />
+      )}
       <div className="focus-indicator">
-        ONLINE <span>·</span> {windowManager.focus.toUpperCase()}
+        ONLINE <span>·</span> {(activeWindow?.id ?? windowManager.focus).toUpperCase()}
       </div>
     </div>
   );

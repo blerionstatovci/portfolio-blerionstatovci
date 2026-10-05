@@ -6,6 +6,8 @@ import { ControlCenter } from "./ControlCenter";
 import { DesktopApp } from "./DesktopApp";
 import { IosStatusBar } from "./IosStatusBar";
 import { LockScreen } from "./LockScreen";
+import { BootScreen } from "./BootScreen";
+import { ToastProvider, useToast } from "./Toast";
 import { useClock } from "../hooks/useClock";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import {
@@ -16,10 +18,23 @@ import {
 } from "../data/settings";
 import type { AppSettings, Theme, WallpaperId } from "../data/settings";
 
-export function RuntimeApp() {
+const BOOT_SESSION_KEY = "blerion-os-booted-v1";
+
+function shouldBoot() {
+  try {
+    return window.sessionStorage.getItem(BOOT_SESSION_KEY) !== "1";
+  } catch {
+    return true;
+  }
+}
+
+function RuntimeShell() {
+  const { showToast } = useToast();
   const [locked, setLocked] = useState(true);
   const time = useClock(30_000);
   const [contactOpen, setContactOpen] = useState(false);
+  const [activeAppName, setActiveAppName] = useState("Workspace");
+  const [booting, setBooting] = useState(shouldBoot);
   const [settings, setSettings] = useLocalStorage<AppSettings>(
     SETTINGS_STORAGE_KEY,
     getDefaultSettings(),
@@ -28,20 +43,47 @@ export function RuntimeApp() {
   const [wallpaperTransition, setWallpaperTransition] = useState(0);
   const [previousWallpaper, setPreviousWallpaper] = useState(() => wallpapers[settings.wallpaper]);
 
+  const completeBoot = () => {
+    try {
+      window.sessionStorage.setItem(BOOT_SESSION_KEY, "1");
+    } catch {
+      // Session storage can be disabled; the boot screen still remains skippable.
+    }
+    setBooting(false);
+  };
+
   useEffect(() => {
     document.documentElement.dataset.theme = settings.theme;
   }, [settings.theme]);
 
-  const updateSetting = <Key extends keyof AppSettings>(key: Key, value: AppSettings[Key]) => {
+  useEffect(() => {
+    if (!booting) return;
+    const timer = window.setTimeout(completeBoot, 1200);
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Tab") completeBoot();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [booting]);
+
+  const updateSetting = <Key extends keyof AppSettings>(
+    key: Key,
+    value: AppSettings[Key],
+    notify = false,
+  ) => {
     setSettings((current) => ({ ...current, [key]: value }));
+    if (notify) showToast("Settings saved.", "success");
   };
 
-  const setTheme = (theme: Theme) => updateSetting("theme", theme);
+  const setTheme = (theme: Theme) => updateSetting("theme", theme, true);
   const setWallpaper = (wallpaper: WallpaperId) => {
     if (wallpaper === settings.wallpaper) return;
     setPreviousWallpaper(wallpapers[settings.wallpaper]);
     setWallpaperTransition((current) => current + 1);
-    updateSetting("wallpaper", wallpaper);
+    updateSetting("wallpaper", wallpaper, true);
   };
 
   return (
@@ -53,14 +95,15 @@ export function RuntimeApp() {
         "--blerion-wallpaper-previous": previousWallpaper,
       } as React.CSSProperties}
     >
-      <IosStatusBar time={time} clock24={settings.clock24} />
+      <IosStatusBar time={time} clock24={settings.clock24} activeAppName={activeAppName} />
       <DesktopApp
         accent={settings.accent}
-        setAccent={(accent) => updateSetting("accent", accent)}
+        setAccent={(accent) => updateSetting("accent", accent, true)}
         reducedMotion={settings.reducedMotion}
-        setReducedMotion={(reducedMotion) => updateSetting("reducedMotion", reducedMotion)}
+        setReducedMotion={(reducedMotion) => updateSetting("reducedMotion", reducedMotion, true)}
         theme={settings.theme}
         setTheme={setTheme}
+        onActiveAppChange={setActiveAppName}
       />
       {locked && (
         <LockScreen
@@ -81,9 +124,18 @@ export function RuntimeApp() {
         brightness={settings.brightness}
         setBrightness={(brightness) => updateSetting("brightness", brightness)}
         clock24={settings.clock24}
-        setClock24={(clock24) => updateSetting("clock24", clock24)}
+        setClock24={(clock24) => updateSetting("clock24", clock24, true)}
       />
       {contactOpen && <ContactForm close={() => setContactOpen(false)} />}
+      {booting && <BootScreen onSkip={completeBoot} />}
     </div>
+  );
+}
+
+export function RuntimeApp() {
+  return (
+    <ToastProvider>
+      <RuntimeShell />
+    </ToastProvider>
   );
 }
