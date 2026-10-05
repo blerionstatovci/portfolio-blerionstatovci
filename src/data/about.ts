@@ -9,7 +9,7 @@ export type AboutEducation = {
 export type AboutCopy = {
   profileEyebrow: string;
   heading: string;
-  paragraphs: readonly [string, string];
+  paragraphs: readonly string[];
   educationEyebrow: string;
   education: readonly AboutEducation[];
 };
@@ -19,8 +19,9 @@ export const aboutCopy: Record<Language, AboutCopy> = {
     profileEyebrow: "PROFILE / 01",
     heading: "I build with purpose.",
     paragraphs: [
-      "I'm Blerion, a Computer Science / Software Engineering student at AAB College who cares about building practical, user-focused web applications, from the interface to the API behind it.",
-      "At university I've worked with SQL, .NET and Java. Alongside my studies, I've completed professional training in Node.js, full-stack development and advanced JavaScript. On the back end I work with Express.js, REST APIs and MongoDB; on the front end with React, Redux, Hooks and TypeScript.",
+      "I’m Blerion, a Computer Science & Software Engineering student at AAB College with a passion for transforming ideas into functional, high-performance web applications.",
+      "I bridge the gap between back-end logic and front-end user experience. Whether designing scalable REST APIs, managing databases, or crafting responsive interfaces, my goal is always the same: writing clean, maintainable code that solves real-world problems.",
+      "I thrive at the intersection of modern web technologies, thoughtful UI/UX design. Always eager to adapt, learn new tools, and collaborate on ambitious digital products.",
     ],
     educationEyebrow: "EDUCATION",
     education: [
