@@ -224,7 +224,7 @@ export function DesktopApp({
       case "projects":
         return <ProjectsApp inspect={setSelected} />;
       case "about":
-        return <AboutApp />;
+        return <AboutApp language={language} setLanguage={setLanguage} reducedMotion={reducedMotion} />;
       case "experience":
         return <ExperienceApp />;
       case "certificates":

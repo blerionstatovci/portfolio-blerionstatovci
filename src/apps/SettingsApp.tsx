@@ -1,4 +1,5 @@
 import { Monitor, Zap } from "lucide-react";
+import { LanguageSwitch } from "../components/LanguageSwitch";
 import type { Language, Theme } from "../data/settings";
 import { t } from "../i18n";
 
@@ -54,10 +55,7 @@ export function SettingsApp({
         <span>
           <Monitor size={15} /> {t(language, "language")}
         </span>
-        <select value={language} onChange={(event) => setLanguage(event.target.value as Language)}>
-          <option value="en">{t(language, "english")}</option>
-          <option value="sq">{t(language, "albanian")}</option>
-        </select>
+        <LanguageSwitch language={language} setLanguage={setLanguage} />
       </label>
     </div>
   );

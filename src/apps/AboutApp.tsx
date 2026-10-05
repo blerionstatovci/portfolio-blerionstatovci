@@ -1,26 +1,55 @@
-import { Fact } from "../components/Fact";
-import { profile } from "../data/profile";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { LanguageSwitch } from "../components/LanguageSwitch";
+import { aboutCopy } from "../data/about";
+import type { Language } from "../data/settings";
 
-export function AboutApp() {
+export function AboutApp({
+  language,
+  setLanguage,
+  reducedMotion,
+}: {
+  language: Language;
+  setLanguage: (value: Language) => void;
+  reducedMotion: boolean;
+}) {
+  const copy = aboutCopy[language];
+  const prefersReducedMotion = useReducedMotion();
+  const animateText = !reducedMotion && !prefersReducedMotion;
+
   return (
-    <div className="content-app split">
-      <div>
-        <span className="eyebrow">PROFILE / 01</span>
-        <h2>Curious by default.</h2>
-        <p>
-          {profile.name} is a Computer Science / Software Engineering student at AAB College with a strong interest in
-          building practical, user-focused web applications. Alongside his academic studies, he has completed
-          professional training in Node.js, full-stack development, advanced JavaScript and front-end development.
-          His training includes backend development with Express.js, RESTful APIs and MongoDB, as well as modern
-          frontend development with React, Redux, React Hooks, Higher-Order Components and Jest. He has also completed
-          courses in Introduction to Web Development and JavaScript Basics, and continues to strengthen his skills
-          through Scrum practice, hands-on coding exercises and real-world portfolio projects.
-        </p>
+    <section className="content-app about-app" aria-labelledby="about-title">
+      <div className="about-toolbar">
+        <span className="eyebrow">{copy.profileEyebrow}</span>
+        <LanguageSwitch language={language} setLanguage={setLanguage} />
       </div>
-      <div className="facts">
-        <Fact label="2024 — Present" value="Bachelor in Computer Science, Software Engineering" detail="Kolegji “AAB”, Prishtinë" />
-        <Fact label="2021 — 2024" value="Diploma in Natural Science" detail="Aleksander Xhuvani High School, Podujevë" />
-      </div>
-    </div>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={language}
+          className="about-layout"
+          lang={language}
+          initial={animateText ? { opacity: 0 } : false}
+          animate={{ opacity: 1 }}
+          exit={animateText ? { opacity: 0 } : undefined}
+          transition={{ duration: animateText ? 0.15 : 0 }}
+        >
+          <div className="about-profile">
+            <h2 id="about-title">{copy.heading}</h2>
+            {copy.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          </div>
+          <section className="about-education" aria-labelledby="education-title">
+            <h3 className="eyebrow" id="education-title">{copy.educationEyebrow}</h3>
+            <ol className="about-timeline">
+              {copy.education.map((item) => (
+                <li key={`${item.period}-${item.title}`}>
+                  <time>{item.period}</time>
+                  <h4>{item.title}</h4>
+                  <p>{item.institution}</p>
+                </li>
+              ))}
+            </ol>
+          </section>
+        </motion.div>
+      </AnimatePresence>
+    </section>
   );
 }

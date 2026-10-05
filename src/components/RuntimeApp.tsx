@@ -44,6 +44,7 @@ function RuntimeShell() {
   );
   const [wallpaperTransition, setWallpaperTransition] = useState(0);
   const [previousWallpaper, setPreviousWallpaper] = useState(() => wallpapers[settings.wallpaper]);
+  const language: Language = settings.language === "sq" ? "sq" : "en";
 
   const completeBoot = () => {
     try {
@@ -57,6 +58,10 @@ function RuntimeShell() {
   useEffect(() => {
     document.documentElement.dataset.theme = settings.theme;
   }, [settings.theme]);
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
 
   useEffect(() => {
     if (!booting) return;
@@ -106,7 +111,7 @@ function RuntimeShell() {
         setReducedMotion={(reducedMotion) => updateSetting("reducedMotion", reducedMotion, true)}
         theme={settings.theme}
         setTheme={setTheme}
-        language={settings.language}
+        language={language}
         setLanguage={(language: Language) => updateSetting("language", language, true)}
         onActiveAppChange={setActiveAppName}
       />
