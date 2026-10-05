@@ -16,7 +16,7 @@ import {
   SETTINGS_VERSION,
   wallpapers,
 } from "../data/settings";
-import type { AppSettings, Theme, WallpaperId } from "../data/settings";
+import type { AppSettings, Language, Theme, WallpaperId } from "../data/settings";
 
 const BOOT_SESSION_KEY = "blerion-os-booted-v1";
 
@@ -103,6 +103,8 @@ function RuntimeShell() {
         setReducedMotion={(reducedMotion) => updateSetting("reducedMotion", reducedMotion, true)}
         theme={settings.theme}
         setTheme={setTheme}
+        language={settings.language}
+        setLanguage={(language: Language) => updateSetting("language", language, true)}
         onActiveAppChange={setActiveAppName}
       />
       {locked && (

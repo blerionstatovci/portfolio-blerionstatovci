@@ -60,6 +60,9 @@
   font-size: 10px;
 }
 
+.contact-resume-actions { margin: 18px 0 2px; }
+.contact-resume-actions .primary-action { border: 1px solid var(--accent); border-radius: 6px; padding: 9px 12px; }
+
 .contact-toast.success {
   border-color: var(--accent);
 }

@@ -1,4 +1,5 @@
 export type Theme = "dark" | "light";
+export type Language = "en" | "sq";
 export type WallpaperId = "studio" | "mountains" | "coast" | "graphite" | "paper";
 
 export type AppSettings = {
@@ -8,6 +9,7 @@ export type AppSettings = {
   clock24: boolean;
   accent: string;
   reducedMotion: boolean;
+  language: Language;
 };
 
 export const SETTINGS_STORAGE_KEY = "blerion-os-settings-v1";
@@ -35,5 +37,6 @@ export function getDefaultSettings(): AppSettings {
     clock24: true,
     accent: "cyan",
     reducedMotion: false,
+    language: "en",
   };
 }

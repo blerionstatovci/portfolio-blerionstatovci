@@ -96,3 +96,32 @@
   .snap-preview { display: none; }
   .window-bar { cursor: default; }
 }
+
+.certificates-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding: 2px 22px 16px;
+}
+
+.certificate-card {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+}
+
+.certificate-card h3 { margin: 9px 0 0; color: var(--text); font-size: 14px; font-weight: 500; line-height: 1.35; }
+.certificate-card p { margin: 8px 0 0; color: var(--muted); font: 9px var(--mono); }
+.certificate-card a { display: inline-flex; align-items: center; gap: 5px; margin-top: 12px; color: var(--accent); font-size: 9px; }
+.case-study-sections { display: grid; gap: 12px; margin-top: 18px; }
+.case-study-sections section { padding-top: 11px; border-top: 1px solid var(--border); }
+.case-study-sections p { margin: 6px 0 0; }
+.secondary-action { display: inline-flex; align-items: center; gap: 5px; margin: 18px 0 0 8px; padding: 10px 13px; color: var(--muted); border: 1px solid var(--border); border-radius: 6px; font-size: 9px; }
+
+.terminal-output { max-height: 330px; overflow: auto; }
+.terminal-output pre { margin: 0; white-space: pre-wrap; font: inherit; }
+
+@media (max-width: 600px) {
+  .certificates-list { grid-template-columns: 1fr; padding-inline: 16px; }
+}

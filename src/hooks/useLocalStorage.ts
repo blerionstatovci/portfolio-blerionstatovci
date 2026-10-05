@@ -11,7 +11,11 @@ export function useLocalStorage<T>(key: string, initialValue: T, version = 1) {
       const stored = window.localStorage.getItem(key);
       if (stored === null) return initialValue;
       const parsed = JSON.parse(stored) as VersionedValue<T>;
-      return parsed.version === version ? parsed.value : initialValue;
+      return parsed.version === version && parsed.value && typeof parsed.value === "object"
+        ? ({ ...initialValue, ...parsed.value } as T)
+        : parsed.version === version
+          ? parsed.value
+          : initialValue;
     } catch {
       return initialValue;
     }

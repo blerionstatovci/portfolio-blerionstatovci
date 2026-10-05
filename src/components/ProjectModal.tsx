@@ -21,6 +21,14 @@ export function ProjectModal({ project, close }: { project: Project; close: () =
         </div>
         <div className="detail-content">
           <p>{project.description}</p>
+          {(project.role || project.problem || project.outcome || project.learnings) && (
+            <div className="case-study-sections">
+              {project.role && <section><span className="eyebrow">ROLE</span><p>{project.role}</p></section>}
+              {project.problem && <section><span className="eyebrow">PROBLEM</span><p>{project.problem}</p></section>}
+              {project.outcome && <section><span className="eyebrow">OUTCOME</span><p>{project.outcome}</p></section>}
+              {project.learnings && <section><span className="eyebrow">LEARNINGS</span><p>{project.learnings}</p></section>}
+            </div>
+          )}
           <div className="tag-row">
             {project.tech.map((technology) => (
               <span key={technology}>{technology}</span>
@@ -29,6 +37,11 @@ export function ProjectModal({ project, close }: { project: Project; close: () =
           <a className="primary-action" href={project.url} target="_blank" rel="noreferrer">
             Launch live demo <ExternalLink size={14} />
           </a>
+          {project.repoUrl && (
+            <a className="secondary-action" href={project.repoUrl} target="_blank" rel="noreferrer">
+              View repository <ExternalLink size={14} />
+            </a>
+          )}
         </div>
       </div>
     </div>

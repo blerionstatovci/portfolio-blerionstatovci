@@ -7,6 +7,7 @@ import { DockItem } from "./DockItem";
 import { Window } from "./Window";
 import { ProjectModal } from "./ProjectModal";
 import { AboutApp } from "../apps/AboutApp";
+import { CertificatesApp } from "../apps/CertificatesApp";
 import { ContactApp } from "../apps/ContactApp";
 import { ExperienceApp } from "../apps/ExperienceApp";
 import { ProjectsApp } from "../apps/ProjectsApp";
@@ -16,7 +17,8 @@ import { TerminalApp } from "../apps/TerminalApp";
 import { apps } from "../data/apps";
 import { profile } from "../data/profile";
 import { projects } from "../data/projects";
-import type { Theme } from "../data/settings";
+import type { Language, Theme } from "../data/settings";
+import { t } from "../i18n";
 import { useWindowManager } from "../hooks/useWindowManager";
 import type { AppId, DockOrigin, Project, WindowState } from "../types/app";
 
@@ -29,6 +31,8 @@ export function DesktopApp({
   setReducedMotion,
   theme,
   setTheme,
+  language,
+  setLanguage,
   onActiveAppChange,
 }: {
   accent: string;
@@ -37,6 +41,8 @@ export function DesktopApp({
   setReducedMotion: (value: boolean) => void;
   theme: Theme;
   setTheme: (value: Theme) => void;
+  language: Language;
+  setLanguage: (value: Language) => void;
   onActiveAppChange?: (value: string) => void;
 }) {
   const { state: windowManager, dispatch } = useWindowManager();
@@ -216,10 +222,12 @@ export function DesktopApp({
         return <AboutApp />;
       case "experience":
         return <ExperienceApp />;
+      case "certificates":
+        return <CertificatesApp />;
       case "skills":
         return <SkillsApp />;
       case "terminal":
-        return <TerminalApp />;
+        return <TerminalApp openApp={open} setTheme={setTheme} />;
       case "settings":
         return (
           <SettingsApp
@@ -229,6 +237,8 @@ export function DesktopApp({
             setReducedMotion={setReducedMotion}
             theme={theme}
             setTheme={setTheme}
+            language={language}
+            setLanguage={setLanguage}
           />
         );
       case "contact":
@@ -253,14 +263,14 @@ export function DesktopApp({
           <span className="eyebrow">
             <i />BLERION OS · PERSONAL WORKSPACE
           </span>
-          <h1>Welcome.</h1>
-          <p>Hi, I’m Blerion. Build thoughtfully. Ship deliberately.</p>
+          <h1>{t(language, "welcome")}</h1>
+          <p>{t(language, "intro")}</p>
           <div className="welcome-actions">
             <button className="primary-action" onClick={() => open("resume")}>
-              Open Resume
+              {t(language, "openResume")}
             </button>
             <a className="secondary-action" href={profile.resumePath} download>
-              Download CV
+              {t(language, "downloadCv")}
             </a>
           </div>
         </div>
@@ -335,7 +345,7 @@ export function DesktopApp({
       </nav>
       <div className="search-launcher">
         <Search size={14} />
-        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search apps and projects…" aria-label="Search apps and projects" />
+        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t(language, "search")} aria-label={t(language, "search")} />
         {query && (
           <button onClick={() => setQuery("")} aria-label="Clear search">
             <X size={13} />

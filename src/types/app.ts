@@ -8,7 +8,8 @@ export type AppId =
   | "resume"
   | "contact"
   | "terminal"
-  | "settings";
+  | "settings"
+  | "certificates";
 
 export type DockOrigin = { x: number; y: number; scale: number };
 
