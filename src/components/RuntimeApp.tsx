@@ -8,7 +8,8 @@ import { IosStatusBar } from "./IosStatusBar";
 import { LockScreen } from "./LockScreen";
 import { BootScreen } from "./BootScreen";
 import { Analytics } from "./Analytics";
-import { ToastProvider, useToast } from "./Toast";
+import { ToastProvider } from "./Toast";
+import { useToast } from "../hooks/useToast";
 import { useClock } from "../hooks/useClock";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import {

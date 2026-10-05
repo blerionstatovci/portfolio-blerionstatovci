@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { ArrowRight, Check, Copy, Mail, X } from "lucide-react";
 import { profile } from "../data/profile";
-import { useToast } from "./Toast";
+import { useToast } from "../hooks/useToast";
 
 export function ContactForm({ inline = false, close }: { inline?: boolean; close?: () => void }) {
   const formRef = useRef<HTMLFormElement>(null);

@@ -1,14 +1,8 @@
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Check, Info, TriangleAlert, X } from "lucide-react";
-
-type ToastTone = "success" | "error" | "info";
+import { ToastContext } from "../hooks/useToast";
+import type { ToastTone } from "../hooks/useToast";
 type ToastItem = { id: number; message: string; tone: ToastTone };
-
-type ToastContextValue = {
-  showToast: (message: string, tone?: ToastTone) => void;
-};
-
-const ToastContext = createContext<ToastContextValue | null>(null);
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<ToastItem[]>([]);
@@ -40,10 +34,4 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       </div>
     </ToastContext.Provider>
   );
-}
-
-export function useToast() {
-  const context = useContext(ToastContext);
-  if (!context) throw new Error("useToast must be used inside ToastProvider");
-  return context;
 }
