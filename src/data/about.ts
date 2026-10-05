@@ -17,7 +17,7 @@ export type AboutCopy = {
 export const aboutCopy: Record<Language, AboutCopy> = {
   en: {
     profileEyebrow: "PROFILE / 01",
-    heading: "Curious by default.",
+    heading: "I build with purpose.",
     paragraphs: [
       "I'm Blerion, a Computer Science / Software Engineering student at AAB College who cares about building practical, user-focused web applications, from the interface to the API behind it.",
       "At university I've worked with SQL, .NET and Java. Alongside my studies, I've completed professional training in Node.js, full-stack development and advanced JavaScript. On the back end I work with Express.js, REST APIs and MongoDB; on the front end with React, Redux, Hooks and TypeScript.",
@@ -38,7 +38,7 @@ export const aboutCopy: Record<Language, AboutCopy> = {
   },
   sq: {
     profileEyebrow: "PROFILI / 01",
-    heading: "Kurioz nga natyra.",
+    heading: "Ndërtoj me qëllim.",
     paragraphs: [
       "Jam Blerion, student i Shkencave Kompjuterike / Inxhinierisë së Softuerit në Kolegjin AAB. Më intereson të ndërtoj aplikacione web praktike, të përqendruara te përdoruesi, nga ndërfaqja deri te API-ja që qëndron pas saj.",
       "Në universitet kam punuar me SQL, .NET dhe Java. Paralelisht me studimet, kam përfunduar trajnime profesionale në Node.js, zhvillim full-stack dhe JavaScript të avancuar. Në back-end punoj me Express.js, REST API dhe MongoDB; në front-end me React, Redux, Hooks dhe TypeScript.",
