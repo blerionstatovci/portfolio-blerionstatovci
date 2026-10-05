@@ -1,1 +1,56 @@
-/* Widget styles remain in the preserved base cascade during Phase 0. */
+.calendar-widget-top {
+  align-items: center;
+}
+
+.calendar-widget-top > div:first-child {
+  display: grid;
+  gap: 4px;
+}
+
+.calendar-nav {
+  display: flex;
+  gap: 4px;
+}
+
+.calendar-nav button {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--muted);
+  background: var(--raised);
+}
+
+.calendar-nav button:hover,
+.calendar-nav button:focus-visible {
+  color: var(--text);
+  border-color: var(--accent);
+  outline: none;
+}
+
+.calendar-days {
+  grid-template-columns: repeat(7, 1fr);
+  display: grid;
+}
+
+.calendar-days > span {
+  min-height: 24px;
+  display: grid;
+  place-items: center;
+}
+
+.control-note {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+:root[data-theme="light"] .calendar-nav button {
+  color: var(--muted);
+  background: var(--raised);
+  border-color: var(--border);
+}

@@ -1,1 +1,193 @@
-/* Desktop shell styles remain in the preserved base cascade during Phase 0. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --raised: #181818;
+  --border: #292929;
+  --text: #f7f7f3;
+  --muted: #a8a8a3;
+  --dim: #74746f;
+  --accent: #a8e2df;
+  --wallpaper-overlay: linear-gradient(115deg, rgba(10, 10, 10, 0.78), rgba(10, 10, 10, 0.42) 52%, rgba(4, 8, 10, 0.86));
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f3f5f1;
+  --surface: #ffffff;
+  --raised: #e9eee9;
+  --border: #d2dbd4;
+  --text: #17211d;
+  --muted: #5f6d65;
+  --dim: #7b8880;
+  --accent: #2f7e72;
+  --wallpaper-overlay: linear-gradient(115deg, rgba(243, 247, 243, 0.86), rgba(243, 247, 243, 0.48) 52%, rgba(229, 235, 229, 0.9));
+}
+
+:root[data-theme="light"],
+:root[data-theme="light"] body,
+:root[data-theme="light"] #root {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+.os-runtime {
+  isolation: isolate;
+  background: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+.os-runtime::before,
+.os-runtime::after {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--wallpaper-overlay), var(--blerion-wallpaper-previous);
+  background-position: center;
+  background-size: cover;
+}
+
+.os-runtime::after {
+  background-image: var(--wallpaper-overlay), var(--blerion-wallpaper);
+}
+
+.os-runtime.wallpaper-transition-1::after {
+  animation: wallpaper-fade-in-a 420ms ease both;
+}
+
+.os-runtime.wallpaper-transition-0::after {
+  animation: wallpaper-fade-in-b 420ms ease both;
+}
+
+.os-runtime > .os-shell {
+  position: relative;
+  z-index: 1;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+@keyframes wallpaper-fade-in-a {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes wallpaper-fade-in-b {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+:root[data-theme="light"] .ios-status-bar,
+:root[data-theme="light"] .dock,
+:root[data-theme="light"] .search-launcher,
+:root[data-theme="light"] .control-center-trigger,
+:root[data-theme="light"] .control-center-panel,
+:root[data-theme="light"] .calendar-widget,
+:root[data-theme="light"] .city-time-widget,
+:root[data-theme="light"] .os-window,
+:root[data-theme="light"] .window-bar,
+:root[data-theme="light"] .project-modal,
+:root[data-theme="light"] .contact-form,
+:root[data-theme="light"] .feedback-form {
+  color: var(--text) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: var(--border) !important;
+  box-shadow: 0 18px 42px rgba(40, 67, 53, 0.14) !important;
+}
+
+:root[data-theme="light"] .window-bar,
+:root[data-theme="light"] .ios-status-bar {
+  background: rgba(255, 255, 255, 0.94) !important;
+}
+
+:root[data-theme="light"] .desktop-heading h1,
+:root[data-theme="light"] .desktop-heading h1 em,
+:root[data-theme="light"] .desktop-icon,
+:root[data-theme="light"] .window-title,
+:root[data-theme="light"] .project-meta h3,
+:root[data-theme="light"] .app-toolbar h2,
+:root[data-theme="light"] .content-app h2,
+:root[data-theme="light"] .music-app h2,
+:root[data-theme="light"] .contact-links a,
+:root[data-theme="light"] .contact-links span,
+:root[data-theme="light"] .fact b,
+:root[data-theme="light"] .training-card h3,
+:root[data-theme="light"] .volunteer-experience h3 {
+  color: var(--text) !important;
+}
+
+:root[data-theme="light"] .eyebrow,
+:root[data-theme="light"] .desktop-heading p,
+:root[data-theme="light"] .desktop-icon small,
+:root[data-theme="light"] .window-status,
+:root[data-theme="light"] .toolbar-count,
+:root[data-theme="light"] .app-footnote,
+:root[data-theme="light"] .focus-indicator,
+:root[data-theme="light"] .project-meta p,
+:root[data-theme="light"] .content-app p,
+:root[data-theme="light"] .fact small,
+:root[data-theme="light"] .training-card strong,
+:root[data-theme="light"] .training-detail,
+:root[data-theme="light"] .music-app p,
+:root[data-theme="light"] .music-note,
+:root[data-theme="light"] .settings label,
+:root[data-theme="light"] .tag-row span {
+  color: var(--muted) !important;
+}
+
+:root[data-theme="light"] .app-icon,
+:root[data-theme="light"] .project-item,
+:root[data-theme="light"] .skill-item,
+:root[data-theme="light"] .training-card,
+:root[data-theme="light"] .settings label,
+:root[data-theme="light"] .tag-row span,
+:root[data-theme="light"] .control-tile,
+:root[data-theme="light"] .control-slider,
+:root[data-theme="light"] .control-select {
+  color: var(--text) !important;
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+}
+
+:root[data-theme="light"] .app-icon {
+  box-shadow: 0 10px 24px rgba(40, 67, 53, 0.12) !important;
+}
+
+:root[data-theme="light"] .terminal {
+  color: #236b60 !important;
+  background: #edf4ef !important;
+}
+
+:root[data-theme="light"] .terminal-title,
+:root[data-theme="light"] .terminal-result,
+:root[data-theme="light"] .terminal-prompt input {
+  color: var(--muted) !important;
+}
+
+:root[data-theme="light"] .terminal-command,
+:root[data-theme="light"] .project-actions button,
+:root[data-theme="light"] .project-actions a,
+:root[data-theme="light"] .primary-action,
+:root[data-theme="light"] .contact-links svg,
+:root[data-theme="light"] .skill-item svg {
+  color: var(--accent) !important;
+}
+
+:root[data-theme="light"] .contact-form input,
+:root[data-theme="light"] .contact-form textarea,
+:root[data-theme="light"] .feedback-form input,
+:root[data-theme="light"] .feedback-form textarea,
+:root[data-theme="light"] .settings select,
+:root[data-theme="light"] .control-select select {
+  color: var(--text) !important;
+  background: var(--raised) !important;
+  border-color: var(--border) !important;
+}
+
+:root[data-theme="light"] .form-submit,
+:root[data-theme="light"] .dock-launcher,
+:root[data-theme="light"] .dock-launcher:hover {
+  color: #ffffff !important;
+  background: var(--accent) !important;
+}

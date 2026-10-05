@@ -7,22 +7,34 @@ import { ProjectModal } from "./ProjectModal";
 import { AboutApp } from "../apps/AboutApp";
 import { ContactApp } from "../apps/ContactApp";
 import { ExperienceApp } from "../apps/ExperienceApp";
-import { MusicApp } from "../apps/MusicApp";
 import { ProjectsApp } from "../apps/ProjectsApp";
 import { SettingsApp } from "../apps/SettingsApp";
 import { SkillsApp } from "../apps/SkillsApp";
 import { TerminalApp } from "../apps/TerminalApp";
 import { apps } from "../data/apps";
 import { profile } from "../data/profile";
+import type { Theme } from "../data/settings";
 import { useWindowManager } from "../hooks/useWindowManager";
 import type { AppId, DockOrigin, Project, WindowState } from "../types/app";
 
-export function DesktopApp() {
+export function DesktopApp({
+  accent,
+  setAccent,
+  reducedMotion,
+  setReducedMotion,
+  theme,
+  setTheme,
+}: {
+  accent: string;
+  setAccent: (value: string) => void;
+  reducedMotion: boolean;
+  setReducedMotion: (value: boolean) => void;
+  theme: Theme;
+  setTheme: (value: Theme) => void;
+}) {
   const { state: windowManager, dispatch } = useWindowManager();
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Project | null>(null);
-  const [accent, setAccent] = useState("cyan");
-  const [reducedMotion, setReducedMotion] = useState(false);
 
   const originFor = useCallback((source?: HTMLElement): DockOrigin => {
     const rect = source?.getBoundingClientRect();
@@ -117,8 +129,6 @@ export function DesktopApp() {
         return <ExperienceApp />;
       case "skills":
         return <SkillsApp />;
-      case "music":
-        return <MusicApp />;
       case "terminal":
         return <TerminalApp />;
       case "settings":
@@ -128,6 +138,8 @@ export function DesktopApp() {
             setAccent={setAccent}
             reducedMotion={reducedMotion}
             setReducedMotion={setReducedMotion}
+            theme={theme}
+            setTheme={setTheme}
           />
         );
       case "contact":
@@ -145,9 +157,9 @@ export function DesktopApp() {
             <i />BLERION OS · PERSONAL WORKSPACE
           </span>
           <h1>
-            Good to see you, <em>Blerion.</em>
+            Welcome.
           </h1>
-          <p>Build thoughtfully. Ship deliberately.</p>
+          <p>Hi, I’m Blerion. Build thoughtfully. Ship deliberately.</p>
         </div>
         <div className="desktop-icons">
           {filtered.map((app) => (

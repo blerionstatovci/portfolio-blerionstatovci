@@ -4,7 +4,7 @@ import { skills } from "../data/skills";
 export function SkillsApp() {
   return (
     <div className="content-app">
-      <span className="eyebrow">CAPABILITIES / 15</span>
+      <span className="eyebrow">CAPABILITIES / {skills.length}</span>
       <h2>Skills</h2>
       <div className="skills-grid">
         {skills.map((skill, index) => (

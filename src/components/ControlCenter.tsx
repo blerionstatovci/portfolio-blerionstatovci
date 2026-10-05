@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { Grid2X2, LockKeyhole, Mail, Settings2, Wifi, X, Zap } from "lucide-react";
+import { Grid2X2, LockKeyhole, Mail, Moon, Settings2, Sun, X } from "lucide-react";
+import type { Theme, WallpaperId } from "../data/settings";
 
 export function ControlCenter({
   setLocked,
   onContact,
+  theme,
+  setTheme,
   wallpaper,
   setWallpaper,
   brightness,
@@ -13,17 +16,16 @@ export function ControlCenter({
 }: {
   setLocked: (value: boolean) => void;
   onContact: () => void;
-  wallpaper: string;
-  setWallpaper: (value: string) => void;
+  theme: Theme;
+  setTheme: (value: Theme) => void;
+  wallpaper: WallpaperId;
+  setWallpaper: (value: WallpaperId) => void;
   brightness: number;
   setBrightness: (value: number) => void;
   clock24: boolean;
   setClock24: (value: boolean) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const [wifi, setWifi] = useState(true);
-  const [theme, setTheme] = useState("blue");
-  const [volume, setVolume] = useState(0.72);
 
   return (
     <>
@@ -43,15 +45,10 @@ export function ControlCenter({
             </button>
           </div>
           <div className="control-grid">
-            <button className={wifi ? "control-tile active" : "control-tile"} onClick={() => setWifi(!wifi)}>
-              <Wifi size={16} />
-              <span>Wi-Fi</span>
-              <small>{wifi ? "Connected" : "Off"}</small>
-            </button>
-            <button className="control-tile" onClick={() => setTheme(theme === "blue" ? "quiet" : "blue")}>
-              <Zap size={16} />
+            <button className="control-tile active" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+              {theme === "dark" ? <Moon size={16} /> : <Sun size={16} />}
               <span>Theme</span>
-              <small>{theme === "blue" ? "White / Blue" : "Quiet"}</small>
+              <small>{theme === "dark" ? "Dark" : "Light"}</small>
             </button>
             <button className="control-tile" onClick={() => setLocked(true)}>
               <LockKeyhole size={16} />
@@ -64,6 +61,7 @@ export function ControlCenter({
               <small>Open form</small>
             </button>
           </div>
+          <p className="control-note">Wi-Fi and Bluetooth icons are decorative status indicators.</p>
           <div className="control-sliders">
             <label className="control-slider">
               <span>
@@ -78,26 +76,15 @@ export function ControlCenter({
                 onChange={(event) => setBrightness(Number(event.target.value))}
               />
             </label>
-            <label className="control-slider">
-              <span>
-                Volume <b>{Math.round(volume * 100)}%</b>
-              </span>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step=".01"
-                value={volume}
-                onChange={(event) => setVolume(Number(event.target.value))}
-              />
-            </label>
           </div>
           <label className="control-select">
             <span>Wallpaper</span>
-            <select value={wallpaper} onChange={(event) => setWallpaper(event.target.value)}>
+            <select value={wallpaper} onChange={(event) => setWallpaper(event.target.value as WallpaperId)}>
               <option value="studio">Studio desk</option>
               <option value="mountains">Soft mountains</option>
               <option value="coast">Coastline</option>
+              <option value="graphite">Graphite gradient</option>
+              <option value="paper">Paper gradient</option>
             </select>
           </label>
           <label className="control-select">

@@ -5,7 +5,6 @@ export type AppId =
   | "projects"
   | "experience"
   | "skills"
-  | "music"
   | "resume"
   | "contact"
   | "terminal"

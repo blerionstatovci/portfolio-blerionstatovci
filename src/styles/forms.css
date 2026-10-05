@@ -1,1 +1,86 @@
-/* Form styles remain in the preserved base cascade during Phase 0. */
+.contact-honeypot {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  clip-path: inset(50%) !important;
+}
+
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.contact-actions .form-submit {
+  margin-top: 0;
+}
+
+.form-submit:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
+
+.form-secondary-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 32px;
+  padding: 7px 9px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--muted);
+  background: var(--raised);
+  font-size: 9px;
+}
+
+.form-secondary-action:hover,
+.form-secondary-action:focus-visible {
+  color: var(--text);
+  border-color: var(--accent);
+  outline: none;
+}
+
+.contact-toast {
+  position: fixed;
+  right: 22px;
+  bottom: 78px;
+  z-index: 120;
+  max-width: min(330px, calc(100vw - 44px));
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.38);
+  font-size: 10px;
+}
+
+.contact-toast.success {
+  border-color: var(--accent);
+}
+
+.contact-toast.error {
+  border-color: #c98383;
+}
+
+:root[data-theme="light"] .contact-toast {
+  color: var(--text);
+  background: #ffffff;
+  box-shadow: 0 16px 34px rgba(40, 67, 53, 0.18);
+}
+
+@media (max-width: 600px) {
+  .contact-actions {
+    align-items: stretch;
+  }
+
+  .contact-actions > * {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}

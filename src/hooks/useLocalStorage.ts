@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
 
-export function useLocalStorage<T>(key: string, initialValue: T) {
+type VersionedValue<T> = {
+  version: number;
+  value: T;
+};
+
+export function useLocalStorage<T>(key: string, initialValue: T, version = 1) {
   const [value, setValue] = useState<T>(() => {
     try {
       const stored = window.localStorage.getItem(key);
-      return stored === null ? initialValue : (JSON.parse(stored) as T);
+      if (stored === null) return initialValue;
+      const parsed = JSON.parse(stored) as VersionedValue<T>;
+      return parsed.version === version ? parsed.value : initialValue;
     } catch {
       return initialValue;
     }
@@ -12,11 +19,11 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
 
   useEffect(() => {
     try {
-      window.localStorage.setItem(key, JSON.stringify(value));
+      window.localStorage.setItem(key, JSON.stringify({ version, value } satisfies VersionedValue<T>));
     } catch {
       // Storage can be unavailable in private or restricted browsing contexts.
     }
-  }, [key, value]);
+  }, [key, value, version]);
 
   return [value, setValue] as const;
 }

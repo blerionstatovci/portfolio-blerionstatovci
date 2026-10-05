@@ -1,1 +1,9 @@
-/* Responsive styles remain in the preserved base cascade during Phase 0. */
+@media (max-width: 600px) {
+  .calendar-widget-top {
+    padding-bottom: 2px;
+  }
+
+  .control-note {
+    max-width: 260px;
+  }
+}

@@ -42,9 +42,9 @@ export function IosStatusBar({ time, clock24 }: { time: Date; clock24: boolean }
         <Grid2X2 size={14} /> Workspace <span>/</span> Main
       </div>
       <div className="ios-status-right">
-        <div className="ios-status-left">
-          <Wifi size={25} strokeWidth={2.4} />
-          <Bluetooth size={17} strokeWidth={2.4} />
+        <div className="ios-status-left" aria-label="Decorative connectivity indicators">
+          <Wifi size={25} strokeWidth={2.4} aria-hidden="true" />
+          <Bluetooth size={17} strokeWidth={2.4} aria-hidden="true" />
           <span className="ios-percent">{battery === null ? "—" : `${Math.round(level * 100)}%`}</span>
           <span className="ios-battery" style={{ "--battery-level": level } as React.CSSProperties}>
             <i />

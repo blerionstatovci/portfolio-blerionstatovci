@@ -1,5 +1,5 @@
 import { ExternalLink, Globe2, Mail, UserRound } from "lucide-react";
-import { FeedbackForm } from "../components/FeedbackForm";
+import { ContactForm } from "../components/ContactForm";
 import { profile } from "../data/profile";
 
 export function ContactApp() {
@@ -31,7 +31,7 @@ export function ContactApp() {
           <UserRound size={16} /> LinkedIn: {profile.name} <ExternalLink size={12} />
         </a>
       </div>
-      <FeedbackForm inline />
+      <ContactForm inline />
     </div>
   );
 }

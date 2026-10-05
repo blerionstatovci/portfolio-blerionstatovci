@@ -1,1 +1,36 @@
-/* Lock screen styles remain in the preserved base cascade during Phase 0. */
+.lock-screen {
+  background: transparent !important;
+}
+
+:root[data-theme="light"] .lock-screen {
+  color: var(--text) !important;
+}
+
+:root[data-theme="light"] .lock-screen:before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(231, 238, 232, 0.56)) !important;
+}
+
+:root[data-theme="light"] .lock-date,
+:root[data-theme="light"] .lock-profile strong {
+  color: var(--text) !important;
+}
+
+:root[data-theme="light"] .lock-profile span:last-child,
+:root[data-theme="light"] .lock-hint,
+:root[data-theme="light"] .lock-footer,
+:root[data-theme="light"] .swipe-label,
+:root[data-theme="light"] .swipe-end {
+  color: var(--muted) !important;
+}
+
+:root[data-theme="light"] .lock-avatar,
+:root[data-theme="light"] .swipe-handle {
+  color: #ffffff !important;
+  background: var(--accent) !important;
+  border-color: var(--border) !important;
+}
+
+:root[data-theme="light"] .swipe-track {
+  background: rgba(255, 255, 255, 0.58) !important;
+  border-color: var(--border) !important;
+}
