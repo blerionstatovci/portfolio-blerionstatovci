@@ -2,6 +2,12 @@
   align-items: center;
 }
 
+/* Widgets sit outside the desktop shell, so keep them above the wallpaper/shell stack. */
+.calendar-widget,
+.city-time-widget {
+  z-index: 8 !important;
+}
+
 .calendar-widget-top > div:first-child {
   display: grid;
   gap: 4px;
